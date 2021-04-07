@@ -1,0 +1,17 @@
+{
+	"USER_NOT_FOUND": "User not found.",
+	"USER_NOT_FOUND_OR_NOT_LOGGEDIN": "User not found or not logged-in.",
+	"CUSTOMER_NOT_FOUND": "Customer not found.",
+	"CUSTOMER_NOT_FOUND_OR_NOT_LOGGEDIN": "Customer not found or not logged-in.",
+	"CUSTOMER_ACCESS_DENIED": "Access denied for this customer token.",
+	"CART_NOT_FOUND": "Cart not found.",
+	"ORDER_NOT_FOUND": "Order not found.",
+	"UNEXPECTED_ERROR": "Unexpected error.",
+	"PAGE_NOT_FOUND": "Page not found.",
+	"PAYMENT_TOKEN_NOT_FOUND": "Payment token not found.",
+	"ACCESS_DENIED": "Access denied.",
+	"TOKEN_ALIAS_HAS_MORE_THAN_40": "Alias has more than 40 characteres.",
+	"ADDRESS_ALIAS_HAS_MORE_THAN_40": "Alias has more than 40 characteres."
+	
+
+}

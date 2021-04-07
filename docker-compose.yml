@@ -1,0 +1,31 @@
+version: '3.6'
+
+#Named Volumes
+volumes:
+  gf-log-mongo-data:
+    driver: local
+
+services:
+  mongo:
+    image: 'mongo'
+    container_name: user-mongo
+    environment:
+      - MONGO_INITDB_DATABASE=user
+      - MONGO_INITDB_ROOT_USERNAME=grokit
+      - MONGO_INITDB_ROOT_PASSWORD=Q3ZBEqeKDw!
+    ports:
+      - 27017:27017
+    volumes:
+    - ./mongodb:/data/db
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: grokit
+      ME_CONFIG_BASICAUTH_PASSWORD: Q3ZBEqeKDw
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: grokit
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Q3ZBEqeKDw!
+    links:
+      - mongo
