@@ -10,6 +10,8 @@ export class GithubService {
     const index = Math.floor(Math.random() * credentials.length);
     
     const { clientId, clientSecret } = credentials[index];
+    console.log('clientId', clientId);
+    console.log('clientSecret', clientSecret);
     const appOctokit = new Octokit({
       authStrategy: createOAuthAppAuth,
       auth: {
