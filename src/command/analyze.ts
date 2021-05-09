@@ -34,9 +34,13 @@ class SonarAnalyzer {
         try {
           // const repos = await Repository.find({ status: 1, analyzed: 0, forks_count: { $gte: 1000 } }).limit(10)
           
-          const count = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).countDocuments();    
+          console.log('counting')
+          const count = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).countDocuments();              
           const skip = Math.floor(Math.random() * count);
-          const repos = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).skip(skip).limit(1)
+          console.log('skip', count)
+          console.log('finding repos')
+          const repos = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).skip(skip).limit(10)
+          console.log('repos found')
           // const repos = await Repository.find({ status: 1, analyzed: 0, full_name: 'ryantenney/spring-security' })
 
           //TODO: update analyzed
