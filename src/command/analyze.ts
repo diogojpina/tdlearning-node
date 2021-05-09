@@ -23,10 +23,10 @@ class SonarAnalyzer {
 
       this.scanners = [
         // this.runMSBuild, 
-        // this.runMaven,
+        this.runMaven,
         this.runGradle,
-        // this.runAnt,
-        // this.runSonarScanner
+        this.runAnt,
+        this.runSonarScanner
       ];        
     }
 
@@ -78,7 +78,14 @@ class SonarAnalyzer {
         
 
         await this.clean(repo.projectPath);
-        await this.clone(repo.cloneUrl, repo.projectPath);
+
+        try {
+          await this.clone(repo.cloneUrl, repo.projectPath);
+        } catch (e) {
+          console.log(`It was not possible clone ${repo.full_name}`)
+          return false
+        }
+        
 
         for (const scanner of this.scanners) {
             const success = await scanner(repo, this.arguments);
