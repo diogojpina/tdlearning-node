@@ -15,14 +15,19 @@ class GithubController {
 
     const count = await Repository.find({status: 0}).countDocuments();    
     const skip = Math.floor(Math.random() * count);
-    let repos = await Repository.find({status: 0}).skip(skip).limit(50);    
+    let repos = await Repository.find({status: 0}).skip(skip).limit(150);    
     if (repos.length === 0) {
       return res.json({error: true, message: 'Repositories not found!'});
     } 
+
+    function delay(ms: number) {
+      return new Promise( resolve => setTimeout(resolve, ms) );
+    }
     
     const promises = []
     for (const repo of repos) {
       promises.push(GithubService.importRepository(octokit, repo))
+      await delay(300)
     }
 
     const repoNames = await Promise.all(promises)
@@ -41,7 +46,7 @@ class GithubController {
     if (rates.remaining < 100) {
       return res.json({error: true, message: "Low github rates"});
     }
-    
+
     const count = await User.find({status: 0}).countDocuments();    
     const skip = Math.floor(Math.random() * count);
     let users = await User.find({status: 0}).skip(skip).limit(50);    
