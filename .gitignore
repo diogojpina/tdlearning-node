@@ -24,11 +24,15 @@
 
 ###mongodb
 /mongodata/db/
+/mongodb
 ###mongodb
 
 ###node_modules
 /node_modules
 ###node_modules
+
+### build
+/build
 
 yarn.lock
 
