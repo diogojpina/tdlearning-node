@@ -6,19 +6,19 @@ import { User } from '../model/User';
 
 class GithubController {
   public async importRepository (req: Request, res: Response): Promise<Response> {
-    const count = await Repository.find({status: 0}).countDocuments();    
-    const skip = Math.floor(Math.random() * count);
-    let repos = await Repository.find({status: 0}).skip(skip).limit(50);    
-    if (repos.length === 0) {
-      return res.json({error: true, message: 'Repositories not found!'});
-    }
-
     const octokit = await GithubService.getOctokit();
     const rates = await GithubService.getRates(octokit);
     console.log(rates)
     if (rates.remaining < 100) {
       return res.json({error: true, message: rates});
-    }    
+    }   
+
+    const count = await Repository.find({status: 0}).countDocuments();    
+    const skip = Math.floor(Math.random() * count);
+    let repos = await Repository.find({status: 0}).skip(skip).limit(50);    
+    if (repos.length === 0) {
+      return res.json({error: true, message: 'Repositories not found!'});
+    } 
     
     const promises = []
     for (const repo of repos) {
@@ -35,18 +35,18 @@ class GithubController {
   }
 
   public async importUser (req: Request, res: Response): Promise<Response> {
-    const count = await User.find({status: 0}).countDocuments();    
-    const skip = Math.floor(Math.random() * count);
-    let users = await User.find({status: 0}).skip(skip).limit(50);    
-    if (users.length === 0) {
-      return res.json({error: true, message: 'Users not found!'});
-    }
-
     const octokit = await GithubService.getOctokit();
     const rates = await GithubService.getRates(octokit);
     console.log(rates)
     if (rates.remaining < 100) {
       return res.json({error: true, message: "Low github rates"});
+    }
+    
+    const count = await User.find({status: 0}).countDocuments();    
+    const skip = Math.floor(Math.random() * count);
+    let users = await User.find({status: 0}).skip(skip).limit(50);    
+    if (users.length === 0) {
+      return res.json({error: true, message: 'Users not found!'});
     }
 
     const promises = []
