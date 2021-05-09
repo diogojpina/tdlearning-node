@@ -160,7 +160,7 @@ class SonarAnalyzer {
       try {
         const { stdout, stderr } = await exec(command);
       } catch (e) {
-        console.log('error', e);
+        // console.log('error', e);
         return false;
       } 
 
@@ -169,7 +169,7 @@ class SonarAnalyzer {
         const { stdout, stderr } = await exec(command);
         return true
       } catch (e) {
-        console.log('error', e);
+        // console.log('error', e);
         return false;
       } 
     }
@@ -189,7 +189,7 @@ class SonarAnalyzer {
       try {
         const { stdout, stderr } = await exec(command);
       } catch (e) {
-        console.log('error', e);
+        // console.log('error', e);
         return false;
       }       
       
@@ -198,7 +198,7 @@ class SonarAnalyzer {
         const { stdout, stderr } = await exec(command);
         return true
       } catch (e) {
-        console.log('error', e);
+        // console.log('error', e);
         return false;
       } 
     }
@@ -211,7 +211,7 @@ class SonarAnalyzer {
           const { stdout, stderr } = await exec(command);
           return true;
         } catch (e) {
-          console.log('error', e);
+          // console.log('error', e);
           return false;
         }
     }
