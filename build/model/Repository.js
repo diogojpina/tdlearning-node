@@ -116,6 +116,9 @@ const RepositorySchema = new _mongoose2.default.Schema({
         type: Number,
         index: true,
         default: 0
+    },
+    builder: {
+        type: String
     }
 });
 
