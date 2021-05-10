@@ -28,9 +28,12 @@ class GithubController {
     }
     
     const promises = []
+    let i = 1
     for (const repo of repos) {
       promises.push(GithubService.importRepository(octokit, repo))
       await delay(250)
+      console.log(i)
+      i++
     }
 
     const repoNames = await Promise.all(promises)
@@ -38,6 +41,7 @@ class GithubController {
       .catch(erro => {
         console.log(erro.message)
     });
+    console.log(repoNames)
 
     return res.json({data: repoNames});    
   }
