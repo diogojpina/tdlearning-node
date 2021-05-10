@@ -35,7 +35,8 @@ class SonarAnalyzer {
           // const repos = await Repository.find({ status: 1, analyzed: 0, forks_count: { $gte: 1000 } }).limit(10)
           
           console.log('counting')
-          const count = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).countDocuments();              
+          // const count = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).countDocuments();              
+          const count = 10000;
           const skip = Math.floor(Math.random() * count);
           console.log('skip', count)
           console.log('finding repos')
