@@ -88,10 +88,9 @@ class SonarAnalyzer {
         }
         
 
+        console.log(repo.full_name);
         for (const scanner of this.scanners) {
-            const success = await scanner(repo, this.arguments);
-            console.log(repo.full_name);
-            console.log('success', success)
+            const success = await scanner(repo, this.arguments);          
             if (success === true) {
               repo.analyzed = 1;
               await repo.save()
@@ -138,7 +137,6 @@ class SonarAnalyzer {
         command += ` -f ${pomFile} 'sonar:sonar' `
         command += args;
 
-        console.log(process.env.MAVEN_SKIPTESTS)
         if (process.env.MAVEN_SKIPTESTS === 'true') {
             command += ' -DskipTests=true';
         }
