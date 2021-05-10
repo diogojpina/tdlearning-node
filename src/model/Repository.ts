@@ -121,6 +121,7 @@ const RepositorySchema = new mongoose.Schema({
         type: String
     }
 });
+RepositorySchema.index({ status: 1, analyzed: 1, language: 1 });
 
 const Repository = mongoose.model('repository', RepositorySchema, 'repository');
 
