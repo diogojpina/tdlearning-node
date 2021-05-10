@@ -57,6 +57,8 @@ class ImportRepository {
             console.log(erro.message)
         });
 
+        console.log(repoNames);
+
         process.exit(0);
     }
 }

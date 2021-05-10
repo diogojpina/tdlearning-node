@@ -53,7 +53,6 @@ export class GithubService {
           await Organization.collection.insertOne(repoResponse.data.owner);
         }
       }
-      console.log('inserted the owner')
       
       const contributorsResponse = await octokit.repos.listContributors({owner, repo:repoName, per_page: 100});
 
@@ -68,7 +67,8 @@ export class GithubService {
         await User.insertMany(users);
       }
       
-      console.log('inserted all contributors')
+      
+      console.log(`finished repo: ${repoName}`)
 
            
       return repo.full_name
