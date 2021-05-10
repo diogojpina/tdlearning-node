@@ -15,7 +15,7 @@ class GithubController {
 
     console.log('counting');
     // const count = await Repository.find({status: 0}).countDocuments();    
-    const count = 20000
+    const count = 20000000
     const skip = Math.floor(Math.random() * count);
     console.log('skip', skip);
     let repos = await Repository.find({status: 0}).skip(skip).limit(50);    
