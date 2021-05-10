@@ -31,10 +31,12 @@ class GithubController {
     let i = 1
     for (const repo of repos) {
       promises.push(GithubService.importRepository(octokit, repo))
-      await delay(250)
+      await delay(400)
       console.log(i)
       i++
     }
+
+  
 
     const repoNames = await Promise.all(promises)
       .then(values => values)
