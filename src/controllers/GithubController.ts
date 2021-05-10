@@ -34,7 +34,6 @@ class GithubController {
       .catch(erro => {
         console.log(erro.message)
     });
-    console.log(repoNames)
 
     return res.json({data: repoNames});    
   }
