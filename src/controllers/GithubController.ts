@@ -15,7 +15,7 @@ class GithubController {
 
     const count = await Repository.find({status: 0}).countDocuments();    
     const skip = Math.floor(Math.random() * count);
-    let repos = await Repository.find({status: 0}).skip(skip).limit(150);    
+    let repos = await Repository.find({status: 0}).skip(skip).limit(200);    
     if (repos.length === 0) {
       return res.json({error: true, message: 'Repositories not found!'});
     } 
@@ -27,7 +27,7 @@ class GithubController {
     const promises = []
     for (const repo of repos) {
       promises.push(GithubService.importRepository(octokit, repo))
-      await delay(300)
+      await delay(250)
     }
 
     const repoNames = await Promise.all(promises)
