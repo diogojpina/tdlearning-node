@@ -13,9 +13,12 @@ class GithubController {
       return res.json({error: true, message: rates});
     }   
 
+    console.log('counting');
     const count = await Repository.find({status: 0}).countDocuments();    
     const skip = Math.floor(Math.random() * count);
+    console.log('skip', skip);
     let repos = await Repository.find({status: 0}).skip(skip).limit(200);    
+    console.log('loaded repos');
     if (repos.length === 0) {
       return res.json({error: true, message: 'Repositories not found!'});
     } 
