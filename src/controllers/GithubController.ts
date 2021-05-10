@@ -14,29 +14,20 @@ class GithubController {
     }   
 
     console.log('counting');
-    const count = await Repository.find({status: 0}).countDocuments();    
+    // const count = await Repository.find({status: 0}).countDocuments();    
+    const count = 20000
     const skip = Math.floor(Math.random() * count);
     console.log('skip', skip);
-    let repos = await Repository.find({status: 0}).skip(skip).limit(200);    
+    let repos = await Repository.find({status: 0}).skip(skip).limit(50);    
     console.log('loaded repos');
     if (repos.length === 0) {
       return res.json({error: true, message: 'Repositories not found!'});
     } 
 
-    function delay(ms: number) {
-      return new Promise( resolve => setTimeout(resolve, ms) );
-    }
-    
     const promises = []
-    let i = 1
     for (const repo of repos) {
       promises.push(GithubService.importRepository(octokit, repo))
-      await delay(400)
-      console.log(i)
-      i++
     }
-
-  
 
     const repoNames = await Promise.all(promises)
       .then(values => values)
