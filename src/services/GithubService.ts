@@ -49,6 +49,7 @@ export class GithubService {
     } catch (error) {            
       if (error.status === 404) {
         await Repository.updateOne({id: repo.id}, { private: true, status: 1})  ;
+        return `Repo ${owner}/${repoName} not found`
       }
       return false;
     }
