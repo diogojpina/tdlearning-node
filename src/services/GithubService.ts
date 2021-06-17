@@ -38,10 +38,20 @@ export class GithubService {
     return (await octokit.rateLimit.get()).data.rate
   }
 
-  public static async importRepository(octokit: Octokit, repo) {            
+  public static async importRepository(octokit: Octokit, repo) {         
     const { owner, repoName } = GithubService.getRepositoryOwnerAndName(repo.full_name)
 
-    const repoResponse = await octokit.repos.get({owner, repo: repoName});
+    console.log('full_name', `${owner}/${repoName}`)
+
+    let repoResponse;
+    try {
+      repoResponse = await octokit.repos.get({owner, repo: repoName});
+    } catch (error) {            
+      if (error.status === 404) {
+        await Repository.updateOne({id: repo.id}, { private: true, status: 1})  ;
+      }
+      return false;
+    }
 
     if (repoResponse.status === 200) {  
       await Repository.updateOne({id: repo.id}, {...repoResponse.data, status: 1});
