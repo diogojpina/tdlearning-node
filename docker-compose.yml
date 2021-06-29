@@ -2,13 +2,13 @@ version: '3.6'
 
 #Named Volumes
 volumes:
-  gf-log-mongo-data:
+  td-mongo-data:
     driver: local
 
 services:
-  mongo:
+  td-mongo:
     image: 'mongo'
-    container_name: tdlearning-mongo
+    container_name: td-mongo
     environment:
       - MONGO_INITDB_DATABASE=user
       - MONGO_INITDB_ROOT_USERNAME=td
@@ -17,15 +17,16 @@ services:
       - 27017:27017
     volumes:
     - ./mongodb:/data/db
-  mongo-express:
+  td-mongo-express:
     image: mongo-express
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: td
-      ME_CONFIG_BASICAUTH_PASSWORD: 9Hqy6YqAytkPkNcU
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_ADMINUSERNAME: td
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 9Hqy6YqAytkPkNcU!
+      - ME_CONFIG_BASICAUTH_USERNAME=td
+      - ME_CONFIG_BASICAUTH_PASSWORD=9Hqy6YqAytkPkNcU
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_SERVER=td-mongo
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=td
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=9Hqy6YqAytkPkNcU!
     links:
-      - mongo
+      - td-mongo
