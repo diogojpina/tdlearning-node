@@ -62,13 +62,13 @@ const UserSchema = new mongoose.Schema({
     type: Date
   },
   updated_at: {
-      type: Date
+    type: Date
   },
   status: {
     type: Number,
     index: true,
     default: 0
-  },
+  }
 })
 
 const User = mongoose.model('user', UserSchema, 'user')
