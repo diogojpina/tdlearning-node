@@ -12,7 +12,7 @@ const EmailTrackingSchema = new mongoose.Schema({
   timestamp: {
     type: String
   },
-  'smtp-id': {
+  smtpId: {
     type: String
   }
 })

@@ -3,8 +3,16 @@ import { EmailTracking } from '../model/EmailTracking'
 
 class TrackingEmailController {
   public async eventWebHook (req: Request, res: Response): Promise<Response> {
-    console.log('body', req.body)
-    await EmailTracking.insertMany(req.body)
+    const trackings = []
+    for (const tracking of req.body) {
+      trackings.push({
+        email: tracking.email,
+        event: tracking.event,
+        timestamp: tracking.timestamp,
+        smtpId: tracking['smtp-id']
+      })
+    }
+    await EmailTracking.insertMany(trackings)
 
     return res.json({})
   }
