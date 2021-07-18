@@ -11,8 +11,15 @@ class TrackingEmailController {
         timestamp: tracking.timestamp,
         smtpId: tracking['smtp-id']
       })
+
+      await EmailTracking.create({
+        email: tracking.email,
+        event: tracking.event,
+        timestamp: tracking.timestamp,
+        smtpId: tracking['smtp-id']
+      })
     }
-    await EmailTracking.insertMany(trackings)
+    // await EmailTracking.insertMany(trackings)
 
     return res.json({})
   }
