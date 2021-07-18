@@ -17,6 +17,6 @@ const EmailTrackingSchema = new mongoose.Schema({
   }
 })
 
-const EmailTracking = mongoose.model('EmailTracking', EmailTrackingSchema, 'EmailTracking')
+const EmailTracking = mongoose.model('emailTracking', EmailTrackingSchema, 'emailTracking')
 
 export { EmailTracking, EmailTrackingSchema }
