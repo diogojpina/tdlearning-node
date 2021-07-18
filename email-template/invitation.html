@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Technical Debt Prioritization Research</title>
+  </head>
+  <body>
+  <div class="container">
+    <p>Hi {{participant.name}},</p>
+
+    {{friendMessage}}
+
+    <p>My name is Diogo Pina and I am a Ph.D. Candidate in Computer Science (<a href="https://www.ime.usp.br/~diogojp/cv/">CV</a>). Under the guidance of my advisor we are developing context-adaptive methods using machine learning to prioritize the payment of technical debt items in real software projects.</p>
+
+    <p>This research depends on gathering a large number of examples of technical debt items, along with information about how their payment should be prioritized. You can contribute to this research project by answering some questions about technical debt items we have found in the <b>{{project.name}}</b> project. <a href="{{{project.url}}}">Click here</a> or visit  <a href="{{{project.url}}}">{{{project.url}}}</a> to participate.</p>
+
+    <p>Learn more about the research project by visiting our website <a href="{{{project.url}}}" target="_blank">{{{project.url}}}</a></p>
+
+    <p>If you have any questions or want to make any comments, please contact us by email <a href="mailto:diogojp@ime.usp.br?subject=Techinical%20Debt%20Prioritization%20Questions">diogojp@ime.usp.br</a>.</p>
+
+    <p><span style="font-weight: bold;">Why participate in the research?</span> By participating in this research you will be contributing to the development of an intelligent method of technical debt prioritization. At the end of the project, we will make available a technical debt prioritization tool and videos teaching how to manage technical debt using the tool.</p>
+
+    <p><span style="font-weight: bold;">What is technical debt?</span> In software-intensive systems, technical debt is a design or implementation construct that is expedient in the short term, but sets up a technical context that can make a future change more costly or impossible. Technical debt is a contingent liability whose impact is limited to internal system qualities, primarily maintainability and evolvability. - <a href="https://mtd2016dagstuhl.org" target="_blank">Dagstuhl Seminar on Technical Debt Research</a></p>
+
+    <p><span style="font-weight: bold;">Consent Terms</span> You can see the informed consent for participation in research activities by clicking <a href="{{{consentUrl}}}" target="_blank">clicking here</a> or accessing <a href="{{{consentUrl}}}" target="_blank">{{consentUrl}}</a>.</p> 
+
+    Thank you, <br />
+    Diogo Pina <br />
+    Researcher and Ph.D Candidate <br />
+    University of Maryland Baltimore County - United States <br />
+    University of São Paulo - Brazil <br />
+
+    <br /><br />
+
+    <p style="text-align: center;">If you no longer wish to receive such messages, <a href="{{{project.cancelUrl}}}">click here</a>. </p>
+  </div>
+</body>
+</html>

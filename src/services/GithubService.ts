@@ -94,11 +94,11 @@ export class GithubService {
       for (const contributorData of contributorsResponse.data) {
         const user = await User.findOne({ login: contributorData.login })
         if (user !== null) {
-          users.push(user)
+          users.push({ user, status: 0 })
         } else {
           const newUser = new User(contributorData)
           await User.collection.insertOne(newUser)
-          users.push(user)
+          users.push({ user: newUser, status: 0 })
         }
       }
       await Repository.updateOne({ _id: repo._id }, { contributors: users })

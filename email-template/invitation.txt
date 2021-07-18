@@ -1,0 +1,26 @@
+Hi {{participant.name}},
+
+{{friendMessage}}
+
+My name is Diogo Pina and I am a Ph.D. Candidate in Computer Science (https://www.ime.usp.br/~diogojp/cv). Under the guidance of my advisor we are developing context-adaptive methods using machine learning to prioritize the payment of technical debt items in real software projects.
+
+This research depends on gathering a large number of examples of technical debt items, along with information about how their payment should be prioritized. You can contribute to this research project by answering some questions about technical debt items we have found in the {{project.name}} project. Visit {{project.url}} to participate.
+
+Learn more about the research project by visiting our website {{project.baseUrl}}
+
+If you have any questions or want to make any comments, please contact us by email diogojp@ime.usp.br.
+
+Why participate in the research? By participating in this research you will be contributing to the development of an intelligent method of technical debt prioritization. At the end of the project, we will make available a technical debt prioritization tool and videos teaching how to manage technical debt using the tool.
+
+What is technical debt? In software-intensive systems, technical debt is a design or implementation construct that is expedient in the short term, but sets up a technical context that can make a future change more costly or impossible. Technical debt is a contingent liability whose impact is limited to internal system qualities, primarily maintainability and evolvability. - Dagstuhl Seminar on Technical Debt Research (https://mtd2016dagstuhl.org)
+
+Consent Terms You can see the informed consent for participation in research activities by accessing {{consentUrl}}
+
+Thank you,
+Diogo Pina
+Researcher and Ph.D Candidate
+University of Maryland Baltimore County - United States
+University of São Paulo - Brazil
+
+    
+If you no longer wish to receive such messages, access: {{project.cancelUrl}}.

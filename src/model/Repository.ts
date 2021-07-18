@@ -48,10 +48,12 @@ const RepositorySchema = new Schema({
     type: Number
   },
   stargazers_count: {
-    type: Number
+    type: Number,
+    index: true
   },
   watchers_count: {
-    type: Number
+    type: Number,
+    index: true
   },
   language: {
     type: String,
@@ -85,7 +87,8 @@ const RepositorySchema = new Schema({
     type: Number
   },
   forks: {
-    type: Number
+    type: Number,
+    index: true
   },
   open_issues: {
     type: Number
@@ -125,7 +128,14 @@ const RepositorySchema = new Schema({
   builder: {
     type: String
   },
-  contributors: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+  contributors: [{
+    user: { type: Schema.Types.ObjectId, ref: 'user' },
+    status: { type: Number },
+    delivered: { type: Boolean, default: false },
+    opened: { type: Boolean, default: false },
+    clicked: { type: Boolean, default: false },
+    unsubscribed: { type: Boolean, default: false }
+  }]
 })
 RepositorySchema.index({ status: 1, analyzed: 1, language: 1 })
 
