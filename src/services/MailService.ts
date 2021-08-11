@@ -13,7 +13,7 @@ export class MailService {
   public async sendEmail (to: string, subject: string, html: string, text: string) :Promise<void> {
     const msg = {
       to,
-      from: process.env.SENDGRID_FROM_EMAIL,
+      from: { name: process.env.SENDGRID_FROM_NAME, email: process.env.SENDGRID_FROM_EMAIL },
       replyTo: process.env.SENDGRID_REPLYTO,
       subject,
       html,
@@ -35,7 +35,7 @@ export class MailService {
   }
 
   public async applyTemplate (filepath: string, vars: any) :Promise<string> {
-    console.log(`Loading ${filepath}`)
+    // console.log(`Loading ${filepath}`)
     const content = await readFile(filepath)
     const contentFilled = Mustache.render(content.toString(), vars)
     return contentFilled

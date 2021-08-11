@@ -19,8 +19,8 @@ Consent Terms You can see the informed consent for participation in research act
 Thank you,
 Diogo Pina
 Researcher and Ph.D Candidate
-University of Maryland Baltimore County - United States
 University of São Paulo - Brazil
+University of Maryland Baltimore County - United States
 
     
 If you no longer wish to receive such messages, access: {{project.cancelUrl}}.
