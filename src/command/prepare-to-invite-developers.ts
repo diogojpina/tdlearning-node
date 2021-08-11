@@ -34,6 +34,7 @@ class PrepareToInviteDevelopers {
       try {
         await GithubService.importContributors(octokit, repo)
       } catch (error) {
+        console.log(error.message)
         continue
       }
 
