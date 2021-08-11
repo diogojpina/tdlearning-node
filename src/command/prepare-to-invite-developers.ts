@@ -31,7 +31,11 @@ class PrepareToInviteDevelopers {
     const repos = await Repository.find({ status: 1, analyzed: 1, prepared: { $ne: true } }).limit(limit)
 
     for (const repo of repos) {
-      await GithubService.importContributors(octokit, repo)
+      try {
+        await GithubService.importContributors(octokit, repo)
+      } catch (error) {
+        continue
+      }
 
       await Repository.updateOne({ _id: repo._id }, { prepared: true })
     }
