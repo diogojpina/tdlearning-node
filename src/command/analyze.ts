@@ -37,7 +37,7 @@ class SonarAnalyzer {
 
         console.log('counting')
         // const count = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).countDocuments();
-        const skip = options.skip ? parseInt(options.skip) : 1000000
+        const skip = options.skip ? Math.random() * parseInt(options.skip) : 1000000
         const limit = options.limit ? parseInt(options.limit) : 10
         console.log('finding repos')
         const repos = await Repository.find({ status: 1, analyzed: 0, language: 'Java' }).skip(skip).limit(limit)
@@ -47,10 +47,6 @@ class SonarAnalyzer {
 
         // TODO: update analyzed
         await this.updateAnalyzed(repos, 2)
-
-        function delay (ms: number) {
-          return new Promise(resolve => setTimeout(resolve, ms))
-        }
 
         const promises = []
         for (const repo of repos) {
