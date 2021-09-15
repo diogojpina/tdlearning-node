@@ -135,6 +135,7 @@ class SonarAnalyzer {
       if (process.env.MAVEN_SKIPTESTS === 'true') {
         command += ' -DskipTests=true'
       }
+      command += ' -Drat.skip=true'
 
       if (process.env.MAVEN_LOGIN) {
         command += ` -Dsonar.login=${process.env.MAVEN_LOGIN}`
