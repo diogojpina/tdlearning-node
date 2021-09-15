@@ -136,6 +136,20 @@ class SonarAnalyzer {
         command += ' -DskipTests=true'
       }
 
+      if (process.env.MAVEN_LOGIN) {
+        command += ` -Dsonar.login=${process.env.MAVEN_LOGIN}`
+      }
+
+      if (process.env.MAVEN_PASSWORD) {
+        command += ` -Dsonar.password=${process.env.MAVEN_PASSWORD}`
+      }
+
+      if (process.env.MAVEN_URL) {
+        command += ` -Dsonar.host.url=${process.env.MAVEN_URL}`
+      }
+
+      console.log('maven-command', command)
+
       try {
         const { stdout, stderr } = await exec(command)
         // console.log('stdout', stdout);
