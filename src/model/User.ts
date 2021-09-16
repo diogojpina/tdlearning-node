@@ -19,44 +19,44 @@ const UserSchema = new mongoose.Schema({
     index: true
   },
   site_admin: {
-    type: Boolean,
+    type: Boolean
   },
   name: {
-    type: String,
+    type: String
   },
   company: {
-    type: String,
+    type: String
   },
   blog: {
-    type: String,
+    type: String
   },
   location: {
-    type: String,
+    type: String
   },
   email: {
     type: String,
     index: true
   },
   hireable: {
-    type: Boolean,
+    type: Boolean
   },
   bio: {
-    type: String,
+    type: String
   },
   twitter_username: {
-    type: String,
+    type: String
   },
   public_repos: {
-    type: Number,
+    type: Number
   },
   public_gists: {
-    type: Number,
+    type: Number
   },
   followers: {
-    type: Number,
+    type: Number
   },
   following: {
-    type: Number,
+    type: Number
   },
   created_at: {
     type: Date
