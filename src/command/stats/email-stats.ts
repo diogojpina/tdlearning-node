@@ -16,6 +16,7 @@ class EmailStats {
 
     await this.connectMongo()
 
+    const emails: string[] = []
     let repos: any
     try {
       repos = await Repository.find({ prepared: true })
@@ -35,11 +36,16 @@ class EmailStats {
         // console.log('email', user.email)
         // console.log('contributor', contributor)
 
+        if (!emails.find(item => item === user.email)) {
+          emails.push(user.email)
+        }
+
         totalUsers++
       }
     }
 
     console.log('total-users', totalUsers)
+    console.log('unique-emails', emails.length)
     process.exit(0)
   }
 
