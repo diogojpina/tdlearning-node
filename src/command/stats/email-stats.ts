@@ -26,14 +26,16 @@ class EmailStats {
     }
 
     const reposCount = repos.length
+    console.log('repos-count', reposCount)
 
     let totalUsers = 0
     let i = 1
     for (const repo of repos) {
       // console.log('full_name', repo.full_name)
       if ((i % 100) === 0) {
-        console.log(`${i++}/${reposCount}`)
+        console.log(`${i}/${reposCount}`)
       }
+      i++
 
       for (const contributor of repo.contributors) {
         const user = contributor.user
