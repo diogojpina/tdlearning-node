@@ -10,6 +10,7 @@ import { GithubService } from '../services/GithubService'
 
 import { MailService } from '../services/MailService'
 import { SonarService } from '../services/SonarService'
+import { Email } from '../model/Email'
 
 config({ path: path.join(__dirname, '../.env') })
 
@@ -42,9 +43,12 @@ class InviteDevelopers {
         const user = contributor.user
         // console.log('contributor-login', user.login)
         // console.log('email', user.email)
+        // console.log('contrib-user', user)
+
         if (contributor.status === 0 && this.validateEmail(user.email) === true) {
           // console.log('email', user.email)
           // console.log('contributor', user)
+
           try {
             await this.sendEmail(user, repo)
           } catch (error) {
@@ -72,6 +76,8 @@ class InviteDevelopers {
   private async sendEmail (user: any, repo: any): Promise<boolean> {
     console.log('full_name', repo.full_name)
     console.log('email', user.email)
+
+    console.log('repo-contri', repo.contributors.length)
 
     const siteBaseUrl = process.env.SITE_BASE_URL
     const apiBaseUrl = process.env.API_BASE_URL
@@ -111,7 +117,34 @@ class InviteDevelopers {
 
     const subject = process.env.SUBJECT
 
-    await mailService.sendEmail('diogojpina@gmail.com', subject, html, text)
+    const emailData = {
+      email: user.email,
+      user: user._id,
+      repoFullName: repo.full_name,
+      size: repo.size,
+      forks: repo.forks,
+      repo: repo._id,
+      subject: subject,
+      html: html,
+      text: text,
+      smtpId: '',
+      processed: false,
+      locked: false
+    }
+
+    const emailSent = await Email.findOne({ email: user.email, processed: false, locked: false })
+    if (emailSent !== null) {
+      if (emailSent.forks >= repo.forks) {
+        emailData.locked = true
+      } else {
+        await Email.updateOne({ _id: emailSent._id }, { $set: { locked: true } })
+      }
+    }
+    await Email.collection.insertOne(emailData)
+
+    // console.log('data', data)
+
+    // await mailService.sendEmail('diogojpina@gmail.com', subject, html, text)
 
     return true
   }

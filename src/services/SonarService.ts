@@ -1,5 +1,6 @@
 import { Pool } from 'pg'
 import crypto from 'crypto'
+import { stat } from 'fs'
 
 export class SonarService {
   private pool: Pool
@@ -61,6 +62,74 @@ export class SonarService {
       inner join projects p on p.uuid = c.project_uuid 
       inner join rules r on r.id  = i.rule_id
       where p.kee = '${projectKee}'`
+    const res = await this.pool.query(query)
+
+    return res
+  }
+
+  public async getProjectTDsStats (projectKee: string) {
+    const tds = await this.getProjectTDs(projectKee)
+
+    const stats = {
+      count: tds.rowCount,
+      blocker: 0,
+      critcal: 0,
+      major: 0,
+      minor: 0,
+      info: 0,
+      contributors_count: 0,
+      files_count: 0,
+      rules_count: 0
+    }
+
+    const contributors: string[] = []
+    const files: string[] = []
+    const rulesId: number[] = []
+
+    for (const td of tds.rows) {
+      if (td.severity === 'BLOCKER') {
+        stats.blocker++
+      } else if (td.severity === 'CRITICAL') {
+        stats.critcal++
+      } else if (td.severity === 'MAJOR') {
+        stats.major++
+      } else if (td.severity === 'MINOR') {
+        stats.minor++
+      } else if (td.severity === 'INFO') {
+        stats.info++
+      }
+
+      if (contributors.includes(td.author_login) === false) {
+        contributors.push(td.author_login)
+      }
+
+      if (files.includes(td.component_uuid) === false) {
+        files.push(td.component_uuid)
+      }
+
+      if (rulesId.includes(td.rule_id) === false) {
+        rulesId.push(td.rule_id)
+      }
+
+      // console.log('td', td)
+    }
+
+    stats.contributors_count = contributors.length
+    stats.files_count = files.length
+    stats.rules_count = rulesId.length
+
+    // console.log('td-stats', stats)
+    return stats
+  }
+
+  public async getProjectOverallMeasures (projectKee: string): Promise<any> {
+    const query = `select pm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, pm.value, pm.text_value
+    from project_measures pm 
+    inner join projects p on p.uuid = pm.component_uuid
+    inner join metrics m on m.id = pm.metric_id 
+    where p.kee = '${projectKee}' and 
+    (m.val_type = 'FLOAT' or m.val_type = 'INT' or m.val_type = 'PERCENT' or m.val_type = 'RATING')
+    order by m.val_type`
     const res = await this.pool.query(query)
 
     return res

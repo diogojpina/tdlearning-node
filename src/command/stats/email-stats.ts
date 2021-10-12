@@ -7,10 +7,16 @@ import { User } from '../../model/User'
 import path from 'path'
 import { config } from 'dotenv'
 import { GithubService } from '../../services/GithubService'
+import { SonarService } from '../../services/SonarService'
 
 config({ path: path.join(__dirname, '../../.env') })
 
 class EmailStats {
+  private sonarService: SonarService;
+  construtor () {
+    this.sonarService = new SonarService()
+  }
+
   public async run () {
     const octokit = await GithubService.getOctokit()
 
