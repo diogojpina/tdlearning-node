@@ -22,6 +22,7 @@ class RepositoryStats {
 
     await this.connectMongo()
 
+    const limit = options.limit ? parseInt(options.limit) : 10
     const filter: any = { status: 1, analyzed: { $ne: 0 } }
     // const filter: any = { full_name: 'apache/maven' }
     if (options.language) {
@@ -29,7 +30,7 @@ class RepositoryStats {
     }
 
     console.log('listing repos')
-    const repos = await Repository.find(filter)
+    const repos = await Repository.find(filter).limit(limit)
     console.log('repos_count', repos.length)
 
     const rows = []
@@ -118,6 +119,7 @@ program.version('0.0.1')
 
 program
   .option('-lang, --language <language>', 'language')
+  .option('-l, --limit <limit>', 'Quantity of repositories to explrorer')
 
 const options = program.opts()
 
