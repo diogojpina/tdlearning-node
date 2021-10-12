@@ -28,15 +28,24 @@ class RepositoryStats {
       filter.language = options.language
     }
 
+    console.log('listing repos')
     const repos = await Repository.find(filter)
+    console.log('repos_count', repos.length)
 
     const rows = []
     for (const repo of repos) {
+      console.log('repo.full_name', repo.full_name)
+
       const projectKee = repo.full_name.replace('/', ':')
       // const projectKee = 'maven-maven-3.3.8'
+      console.log('collecting_metrics')
       const measures = await sonarService.getProjectOverallMeasures(projectKee)
-      const tdStats = await sonarService.getProjectTDsStats(projectKee)
+      console.log('metrics_count', measures.rowCount)
       if (measures.rowCount === 0) continue
+
+      console.log('collecting_tds_stats')
+      const tdStats = await sonarService.getProjectTDsStats(projectKee)
+      console.log('collected_tds_stats')
 
       const now = new Date()
       const createdAt = new Date(repo.created_at)
@@ -75,12 +84,16 @@ class RepositoryStats {
       }
 
       // console.log('STATS', stats)
-      console.log('repo.full_name', repo.full_name)
       rows.push(stats)
     }
 
+    console.log('create-csv-object')
     const csv = new ObjectsToCsv(rows)
+    console.log('csv-object-created')
+
+    console.log('writing')
     await csv.toDisk('./repository-stats.csv')
+    console.log('wrote')
 
     process.exit(0)
   }
