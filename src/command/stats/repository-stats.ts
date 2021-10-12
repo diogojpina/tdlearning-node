@@ -22,8 +22,8 @@ class RepositoryStats {
 
     await this.connectMongo()
 
-    // const filter: any = { status: 1, analyzed: { $ne: 0 } }
-    const filter: any = { full_name: 'apache/maven' }
+    const filter: any = { status: 1, analyzed: { $ne: 0 } }
+    // const filter: any = { full_name: 'apache/maven' }
     if (options.language) {
       filter.language = options.language
     }
