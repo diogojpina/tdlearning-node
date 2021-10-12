@@ -121,9 +121,9 @@ program
   .option('-lang, --language <language>', 'language')
   .option('-l, --limit <limit>', 'Quantity of repositories to explrorer')
 
-const options = program.opts()
-
 program.parse(process.argv)
+
+const options = program.opts()
 
 const repositoryStats = new RepositoryStats()
 repositoryStats.run(options)
