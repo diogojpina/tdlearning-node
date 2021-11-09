@@ -32,6 +32,8 @@ class InviteDevelopers {
       .skip(skip)
       .limit(limit)
 
+    const mailService = new MailService()
+
     for (const repo of repos) {
       // console.log('full_name', repo.full_name)
       // console.log('repo', repo)
@@ -48,7 +50,6 @@ class InviteDevelopers {
           // console.log('contributor', user)
 
           try {
-            const mailService = new MailService()
             await mailService.scheduleEmail(user, repo)
           } catch (error) {
             contributor.status = 3

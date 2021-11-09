@@ -12,6 +12,8 @@ config({ path: path.join(__dirname, '../.env') })
 const readFile = util.promisify(fs.readFile)
 
 export class MailService {
+  private sonarService = new SonarService()
+
   public async sendEmail (email: Email, thanks=false) :Promise<string> {
     let htmlTemplateFile = process.env.TEMPLATE_HTML_FILE
     if (thanks === true) {
@@ -62,12 +64,10 @@ export class MailService {
     const projectKee = repo.full_name.replace('/', ':')
     // const projectKee = 'AdoptOpenJDK:jitwatch'
 
-    const sonarService = new SonarService()
-
-    const project = await sonarService.getProject(projectKee)
-    let participant = await sonarService.getParticipantByProjectEmail(project.kee, user.email)
+    const project = await this.sonarService.getProject(projectKee)
+    let participant = await this.sonarService.getParticipantByProjectEmail(project.kee, user.email)
     if (participant === null) {
-      participant = await sonarService.addParticipant(project.kee, user.email)
+      participant = await this.sonarService.addParticipant(project.kee, user.email)
     }
     // console.log('participant', participant)
 
