@@ -45,8 +45,6 @@ export class SonarService {
     const query = `INSERT INTO participant (project_id, code) VALUES('${projectId}', '${code}') RETURNING *`
     const res = await this.pool.query(query)
 
-    console.log('res', res)
-
     if (res.rowCount === 0) {
       throw new Error('Participant was not created!')
     }
