@@ -54,8 +54,6 @@ class InviteDevelopers {
             contributor.status = 3
             console.log('error', error.message)
           }
-
-          process.exit(0)
         } else if (contributor.status === 0) {
           contributor.status = 2
         }
