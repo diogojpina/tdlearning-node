@@ -59,6 +59,7 @@ class SendEmails {
         const thanks = clicked > 0
 
         const smtpId = await mailService.sendEmail(email, thanks)
+
         email.smtpId = smtpId
         email.ttl = email.ttl ? (email.ttl + 1) : 1
         email.updatedAt = new Date()

@@ -63,7 +63,7 @@ class UpdateEmailStatus {
       const email = await Email.findOne({ email: emailTracking.email, locked: false })
 
       if (emailTracking.event === 'unsubscribed') {
-        await Email.updateMany({ email }, { $set: { unsubscribed: true, unsubscribedAt: date } })
+        await Email.updateMany({ email }, { $set: { locked: true, unsubscribed: true, unsubscribedAt: date } })
         continue
       }
 

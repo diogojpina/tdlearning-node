@@ -112,8 +112,6 @@ export class MailService {
     }
     await Email.collection.insertOne(emailData)
 
-    // console.log('data', data)
-
     return true
   }
 
