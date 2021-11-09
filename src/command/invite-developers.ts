@@ -58,13 +58,9 @@ class InviteDevelopers {
           contributor.status = 2
         }
         i++
-
-        contributor.status = 0
       }
 
-      // // // await Repository.updateOne({ _id: repo._id }, { contributors: repo.contributors })
-      // console.log(repo.contributors)
-      // await Repository.updateOne({ _id: repo._id }, { invited: true, contributors: repo.contributors})
+      await Repository.updateOne({ _id: repo._id }, { $set: { invited: 1, contributors: repo.contributors } })
       console.log(i)
     }
     process.exit(1)

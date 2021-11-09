@@ -59,8 +59,8 @@ export class MailService {
     const siteBaseUrl = process.env.SITE_BASE_URL
     const apiBaseUrl = process.env.API_BASE_URL
 
-    // const projectKee = repo.full_name.replace('/', ':')
-    const projectKee = 'AdoptOpenJDK:jitwatch'
+    const projectKee = repo.full_name.replace('/', ':')
+    // const projectKee = 'AdoptOpenJDK:jitwatch'
 
     const sonarService = new SonarService()
 
