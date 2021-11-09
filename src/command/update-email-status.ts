@@ -69,6 +69,8 @@ class UpdateEmailStatus {
 
       if (!email) continue
 
+      console.log(`email: ${emailTracking.email} - event: ${emailTracking.event}`)
+
       if (emailTracking.event === 'processed') {
         email.processed = true
         email.processedAt = date
