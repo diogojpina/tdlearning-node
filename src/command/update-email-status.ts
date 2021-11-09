@@ -77,14 +77,13 @@ class UpdateEmailStatus {
       } else if (emailTracking.event === 'delivered') {
         email.delivered = true
         email.deliveredAt = date
-      } else if (emailTracking.event === 'opened') {
+      } else if (emailTracking.event === 'open') {
         email.opened = true
         email.openedAt = date
-      } else if (emailTracking.event === 'clicked') {
+      } else if (emailTracking.event === 'click') {
         email.clicked = true
         email.clickedAt = date
       }
-      console.log('email', email)
       await email.save()
 
       emailTracking.processed = true
