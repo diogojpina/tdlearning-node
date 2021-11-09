@@ -45,7 +45,8 @@ class InviteDevelopers {
         // console.log('email', user.email)
         // console.log('contrib-user', user)
 
-        if (contributor.status === 0 && this.validateEmail(user.email) === true) {
+        // if (contributor.status === 0 && this.validateEmail(user.email) === true) {
+        if (this.validateEmail(user.email) === true) {
           // console.log('email', user.email)
           // console.log('contributor', user)
 
