@@ -3,14 +3,11 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { config } from 'dotenv'
 
-import { Organization } from '../model/Organization'
 import { Repository } from '../model/Repository'
-import { User } from '../model/User'
 import { GithubService } from '../services/GithubService'
 
 import { MailService } from '../services/MailService'
 import { SonarService } from '../services/SonarService'
-import { Email } from '../model/Email'
 
 config({ path: path.join(__dirname, '../.env') })
 
@@ -30,6 +27,7 @@ class InviteDevelopers {
     const limit = this.options.limit ? parseInt(this.options.limit) : 10
 
     const repos = await Repository.find({ prepared: true, invited: { $ne: 1 } })
+      .sort({ forks: -1 })
       .populate('contributors.user')
       .skip(skip)
       .limit(limit)
@@ -50,7 +48,8 @@ class InviteDevelopers {
           // console.log('contributor', user)
 
           try {
-            await this.sendEmail(user, repo)
+            const mailService = new MailService()
+            await mailService.scheduleEmail(user, repo)
           } catch (error) {
             contributor.status = 3
             console.log('error', error.message)
@@ -71,82 +70,6 @@ class InviteDevelopers {
       console.log(i)
     }
     process.exit(1)
-  }
-
-  private async sendEmail (user: any, repo: any): Promise<boolean> {
-    console.log('full_name', repo.full_name)
-    console.log('email', user.email)
-
-    console.log('repo-contri', repo.contributors.length)
-
-    const siteBaseUrl = process.env.SITE_BASE_URL
-    const apiBaseUrl = process.env.API_BASE_URL
-
-    // const projectKee = repo.full_name.replace('/', ':')
-    const projectKee = 'AdoptOpenJDK:jitwatch'
-
-    const project = await this.sonarService.getProject(projectKee)
-    let participant = await this.sonarService.getParticipantByProjectEmail(project.kee, user.email)
-    if (participant === null) {
-      participant = await this.sonarService.addParticipant(project.kee, user.email)
-    }
-    console.log('participant', participant)
-
-    const mailService = new MailService()
-
-    const vars: any = {
-      participant: {
-        name: user.name
-      },
-      project: {
-        name: repo.name,
-        baseUrl: `${siteBaseUrl}/?project=${project.kee}&user=${participant.participant_id}`,
-        url: `${siteBaseUrl}/questionnaire.html?project=${project.kee}&user=${participant.participant_id}`,
-        cancelUrl: `${apiBaseUrl}/cancelInscription.php?code=${participant.code}&project=${project.kee}&user=${participant.participant_id}`
-      },
-      consentUrl: process.env.EMAIL_CONSENT_URL
-    }
-
-    const htmlTemplateFile = process.env.TEMPLATE_HTML_FILE
-    const html = await mailService.applyTemplate(htmlTemplateFile, vars)
-    // console.log('html', html)
-
-    const textTemplateFile = process.env.TEMPLATE_TXT_FILE
-    const text = await mailService.applyTemplate(textTemplateFile, vars)
-    // console.log('text', text)
-
-    const subject = process.env.SUBJECT
-
-    const emailData = {
-      email: user.email,
-      user: user._id,
-      repoFullName: repo.full_name,
-      size: repo.size,
-      forks: repo.forks,
-      repo: repo._id,
-      subject: subject,
-      html: html,
-      text: text,
-      smtpId: '',
-      processed: false,
-      locked: false
-    }
-
-    const emailSent = await Email.findOne({ email: user.email, processed: false, locked: false })
-    if (emailSent !== null) {
-      if (emailSent.forks >= repo.forks) {
-        emailData.locked = true
-      } else {
-        await Email.updateOne({ _id: emailSent._id }, { $set: { locked: true } })
-      }
-    }
-    await Email.collection.insertOne(emailData)
-
-    // console.log('data', data)
-
-    // await mailService.sendEmail('diogojpina@gmail.com', subject, html, text)
-
-    return true
   }
 
   private validateEmail (email: string):boolean {

@@ -13,7 +13,13 @@ const EmailTrackingSchema = new mongoose.Schema({
     type: String
   },
   smtpId: {
-    type: String
+    type: String,
+    index: true
+  },
+  processed: {
+    type: Boolean,
+    default: false,
+    index: true
   }
 })
 

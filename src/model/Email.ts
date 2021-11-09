@@ -17,21 +17,38 @@ const EmailSchema = new mongoose.Schema({
     type: Number
   },
   repo: { type: Schema.Types.ObjectId, ref: 'repo' },
+  vars: {
+    participant: {
+      name: { type: String }
+    },
+    project: {
+      name: { type: String },
+      baseUrl: { type: String },
+      url: { type: String },
+      cancelUrl: { type: String }
+    },
+    concentUrl: { type: String }
+  },
   subject: {
     type: String
   },
-  html: {
-    type: String
-  },
-  text: {
-    type: String
-  },
+  // html: {
+  //   type: String
+  // },
+  // text: {
+  //   type: String
+  // },
   locked: {
     type: Boolean,
     default: true
   },
+  ttl: {
+    type: Number,
+    default: 0
+  },
   smtpId: {
-    type: String
+    type: String,
+    index: true
   },
   processed: {
     type: Boolean,
@@ -39,35 +56,38 @@ const EmailSchema = new mongoose.Schema({
     default: false
   },
   processedAt: {
-    type: String
+    type: Date
   },
   delivered: {
     type: Boolean,
     default: false
   },
   deliveredAt: {
-    type: String
+    type: Date
   },
   opened: {
     type: Boolean,
     default: false
   },
   openedAt: {
-    type: String
+    type: Date
   },
   clicked: {
     type: Boolean,
     default: false
   },
   clickedAt: {
-    type: String
+    type: Date
   },
   unsubscribed: {
     type: Boolean,
     default: false
   },
   unsubscribedAt: {
-    type: String
+    type: Date
+  },
+  updatedAt: {
+    type: Date
   }
 })
 

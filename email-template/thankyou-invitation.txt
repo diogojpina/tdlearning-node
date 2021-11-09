@@ -1,0 +1,18 @@
+Hi {{participant.name}},
+
+Thank you for contributing to our research on technical debt prioritization.
+
+You can keep contributing to this research project by answering some more questions about technical debt items we have found in the {{project.name}} project. Visit {{project.url}} to participate.
+
+Learn more about the research project by visiting our website {{project.baseUrl}}
+
+If you have any questions or want to make any comments, please contact us by email diogojp@ime.usp.br.
+
+Thank you,
+Diogo Pina
+Researcher and Ph.D Candidate
+University of São Paulo - Brazil
+University of Maryland Baltimore County - United States
+
+    
+If you no longer wish to receive such messages, access: {{project.cancelUrl}}.
