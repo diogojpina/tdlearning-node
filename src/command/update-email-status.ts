@@ -84,6 +84,7 @@ class UpdateEmailStatus {
         email.clicked = true
         email.clickedAt = date
       }
+      console.log('email', email)
       await email.save()
 
       emailTracking.processed = true
