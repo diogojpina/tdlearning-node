@@ -30,8 +30,9 @@ class RelateOldSonarProjects {
       const repo = await Repository.findOne({ full_name, analyzed: { $ne: 1 } })
       if (repo !== null) {
         console.log('full', full_name)
-        repo.status = 1
         repo.analyzed = 1
+
+        await repo.save()
       }
     }
 
