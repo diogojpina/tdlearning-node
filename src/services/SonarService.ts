@@ -15,6 +15,13 @@ export class SonarService {
     })
   }
 
+  public async getAllProjectsKee (): Promise<any> {
+    const query = 'select kee from projects'
+    const res = await this.pool.query(query)
+
+    return res.rows
+  }
+
   public async getProject (kee: string): Promise<any> {
     const query = `SELECT * FROM projects WHERE qualifier = 'TRK' AND kee = '${kee}' limit 1`
     const res = await this.pool.query(query)
