@@ -127,6 +127,18 @@ export class SonarService {
     return stats
   }
 
+  public async getFilesOverallMeasures (): Promise<any> {
+    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, lm.value, lm.text_value from live_measures lm 
+    inner join metrics m on m.id = lm.metric_id 
+    inner join components c on c.uuid = lm.component_uuid 
+    where c."language" = 'java' and c."scope" = 'FIL' and c.qualifier  = 'FIL' and 
+    (m.val_type = 'FLOAT' or m.val_type = 'INT' or m.val_type = 'PERCENT' or m.val_type = 'RATING')    
+    order by c.uuid`
+    const res = await this.pool.query(query)
+
+    return res
+  }
+
   public async getProjectOverallMeasures (projectKee: string): Promise<any> {
     const query = `select pm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, pm.value, pm.text_value
     from project_measures pm 
