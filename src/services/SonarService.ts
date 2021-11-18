@@ -15,6 +15,18 @@ export class SonarService {
     })
   }
 
+  public async getAllProjectsUUID (): Promise<string[]> {
+    const query = 'select uuid from projects'
+    const res = await this.pool.query(query)
+
+    const uuids: string[] = []
+    for (const row of res.rows) {
+      uuids.push(row.uuid)
+    }
+
+    return uuids
+  }
+
   public async getAllProjectsKee (): Promise<any> {
     const query = 'select kee from projects'
     const res = await this.pool.query(query)
@@ -133,6 +145,19 @@ export class SonarService {
     inner join components c on c.uuid = lm.component_uuid 
     where c."language" = 'java' and c."scope" = 'FIL' and c.qualifier  = 'FIL' and 
     (m.val_type = 'FLOAT' or m.val_type = 'INT' or m.val_type = 'PERCENT' or m.val_type = 'RATING')    
+    order by c.uuid`
+    const res = await this.pool.query(query)
+
+    return res
+  }
+
+  public async getFilesOverallMeasuresByProjectUUID (uuid: string): Promise<any> {
+    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, lm.value, lm.text_value from live_measures lm 
+    inner join metrics m on m.id = lm.metric_id 
+    inner join components c on c.uuid = lm.component_uuid 
+    where c."language" = 'java' and c."scope" = 'FIL' and c.qualifier  = 'FIL' and 
+    (m.val_type = 'FLOAT' or m.val_type = 'INT' or m.val_type = 'PERCENT' or m.val_type = 'RATING')
+    and c.project_uuid = '${uuid}'    
     order by c.uuid`
     const res = await this.pool.query(query)
 
