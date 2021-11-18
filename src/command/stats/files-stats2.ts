@@ -25,8 +25,9 @@ class FilesStats {
 
     const projectUUIDs = await sonarService.getAllProjectsUUID()
     console.log('qty-projects', projectUUIDs.length)
+    let i = 0;
     for (const projectUUID of projectUUIDs) {
-      console.log('project-uuid', projectUUID)
+      console.log('project-uuid', projectUUID, i++)
       const measures = await sonarService.getFilesOverallMeasuresByProjectUUID(projectUUID)
 
       let stats: any = {}
