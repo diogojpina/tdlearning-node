@@ -140,7 +140,7 @@ export class SonarService {
   }
 
   public async getFilesOverallMeasures (): Promise<any> {
-    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, lm.value, lm.text_value from live_measures lm 
+    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.domain, m.val_type, lm.value from live_measures lm 
     inner join metrics m on m.id = lm.metric_id 
     inner join components c on c.uuid = lm.component_uuid 
     where c."language" = 'java' and c."scope" = 'FIL' and c.qualifier  = 'FIL' and 
@@ -152,7 +152,7 @@ export class SonarService {
   }
 
   public async getFilesOverallMeasuresByProjectUUID (uuid: string): Promise<any> {
-    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, lm.value, lm.text_value from live_measures lm 
+    const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.domain, m.val_type, lm.value from live_measures lm 
     inner join metrics m on m.id = lm.metric_id 
     inner join components c on c.uuid = lm.component_uuid 
     where c."language" = 'java' and c."scope" = 'FIL' and c.qualifier  = 'FIL' and 

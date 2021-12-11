@@ -22,6 +22,7 @@ class FilesStats {
     const sonarService: SonarService = new SonarService()
 
     const measures = await sonarService.getFilesOverallMeasures()
+    console.log('finish database query')
 
     const rows = []
     let stats: any = {}
