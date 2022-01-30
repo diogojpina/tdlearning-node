@@ -32,6 +32,7 @@ class SampleExportCommand {
 
   public async getRepositoriesSample (samplePercent: number) {
     const total = await Repository.find().countDocuments()
+    console.log('total', total)
 
     const size = Math.floor(total / (total * (samplePercent / 100)))
 
@@ -42,7 +43,7 @@ class SampleExportCommand {
 
       let skip = Math.floor(Math.random() * (end - begin) + begin)
       skip = Math.min(total - 1, skip)
-      // console.log(begin, end, skip)
+      console.log(begin, end, skip)
 
       const repo = await Repository.findOne().skip(skip)
       // console.log('repo', repo)
@@ -65,6 +66,7 @@ class SampleExportCommand {
 
   public async getUsersSample (samplePercent: number) {
     const total = await User.find().countDocuments()
+    console.log('total', total)
 
     const size = Math.floor(total / (total * (samplePercent / 100)))
 
@@ -75,7 +77,7 @@ class SampleExportCommand {
 
       let skip = Math.floor(Math.random() * (end - begin) + begin)
       skip = Math.min(total - 1, skip)
-      // console.log(begin, end, skip)
+      console.log(begin, end, skip)
 
       const user = await User.findOne().skip(skip)
 
