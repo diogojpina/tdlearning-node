@@ -36,8 +36,6 @@ class SampleExportCommand {
 
     const size = Math.floor(total / (total * (samplePercent / 100)))
 
-    const repos = await Repository.find({}, { id: 1, name: 1, full_name: 1, language: 1, size: 1, fork: 1, forks: 1, stargazers_count: 1, watchers_count: 1 })
-
     const repositories = []
     for (let i = 0; i < total; i += size) {
       const begin = i
@@ -47,9 +45,8 @@ class SampleExportCommand {
       skip = Math.min(total - 1, skip)
       console.log(begin, end, skip)
 
-      // const repo = await Repository.findOne().skip(skip)
+      const repo = await Repository.findOne().skip(skip)
       // console.log('repo', repo)
-      const repo = repos[skip]
 
       repositories.push({
         id: repo.id,
