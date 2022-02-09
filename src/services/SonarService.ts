@@ -34,6 +34,13 @@ export class SonarService {
     return res.rows
   }
 
+  public async getProjectsByKeeLike (kee: string): Promise<any> {
+    const query = `select * from projects where kee like '%${kee}%' order by kee`
+    const res = await this.pool.query(query)
+
+    return res.rows
+  }
+
   public async getProject (kee: string): Promise<any> {
     const query = `SELECT * FROM projects WHERE qualifier = 'TRK' AND kee = '${kee}' limit 1`
     const res = await this.pool.query(query)
@@ -139,6 +146,21 @@ export class SonarService {
     return stats
   }
 
+  public async getTDByProjectUUID (uuid: string): Promise<any> {
+    const query = `select i.id as issue_id, i.severity, i.line, i.author_login, i.effort, i.tags, 
+      i.rule_id, r."name" as rule_name, r.plugin_name, r."scope", r.priority, 
+      i.component_uuid, c.kee as component_kee, c.long_name as component_long_name, c."scope" as component_scope, c.qualifier as component_qualifier,
+      i.project_uuid, p.kee as project_kee, p."name" as project_name
+      from issues i
+      inner join rules r on r.id = i.rule_id 
+      inner join components c on c.uuid = i.component_uuid 
+      inner join projects p on p.uuid = i.project_uuid 
+      where p.uuid = '${uuid}'`
+    const res = await this.pool.query(query)
+
+    return res
+  }
+
   public async getFilesOverallMeasures (): Promise<any> {
     const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.domain, m.val_type, lm.value from live_measures lm 
     inner join metrics m on m.id = lm.metric_id 
@@ -151,7 +173,7 @@ export class SonarService {
     return res
   }
 
-  public async getFilesOverallMeasuresByProjectUUID (uuid: string): Promise<any> {
+  public async getProjectsOverallMeasuresByProjectUUID (uuid: string): Promise<any> {
     const query = `select c.uuid, c.long_name, lm.metric_id, m.name, m.domain, m.val_type, lm.value from live_measures lm 
     inner join metrics m on m.id = lm.metric_id 
     inner join components c on c.uuid = lm.component_uuid 
@@ -162,6 +184,37 @@ export class SonarService {
     const res = await this.pool.query(query)
 
     return res
+  }
+
+  public async getFilesMeasuresByComponentUUID (uuid: string): Promise<any> {
+    const query = `select lm.metric_id, m.name, m.short_name, m.description, m.domain, m.val_type, 
+      lm.component_uuid, lm.value, lm.text_value from live_measures lm 
+      inner join metrics m on m.id = lm.metric_id 
+      where lm.component_uuid  = '${uuid}'`
+    const res = await this.pool.query(query)
+
+    const keys = ['lines', 'keys', 'new_lines', 'ncloc_language_distribution', 'classes', 'files',
+      'functions', 'statements', 'comment_lines', 'comment_lines_density', 'complexity', 'file_complexity',
+      'cognitive_complexity', 'coverage', 'lines_to_cover', 'new_lines_to_cover', 'uncovered_lines',
+      'new_uncovered_lines', 'line_coverage', 'new_conditions_to_cover', 'new_uncovered_conditions',
+      'duplicated_lines', 'new_duplicated_lines', 'duplicated_blocks', 'new_duplicated_blocks',
+      'duplicated_lines_density', 'violations', 'major_violations', 'open_issues', 'code_smells',
+      'sqale_index', 'sqale_rating', 'development_cost', 'sqale_debt_ratio', 'reliability_rating',
+      'security_rating', 'security_review_rating', 'last_commit_date']
+
+    const measures = { }
+    for (const key of keys) {
+      measures[`measure_${key}`] = null
+    }
+
+    for (const measure of res.rows) {
+      if (measure.value) {
+        // measures[`measure_${measure.name}`] = measure.value
+        measures[`measure_${measure.name}`] = parseInt(measure.value)
+      }
+    }
+
+    return measures
   }
 
   public async getProjectOverallMeasures (projectKee: string): Promise<any> {
@@ -227,5 +280,16 @@ export class SonarService {
       })
     }
     return formatedMeasures
+  }
+
+  public async getAnswers (): Promise<any> {
+    const query = `select a.id, a.answer1, i.severity , r.name as rule_name, i.component_uuid, c.long_name from answer a 
+      inner join issues i on i.id  = a.issue_id 
+      inner join rules as r on r.id = i.rule_id
+      inner join components c on c.uuid = i.component_uuid 
+      where a.id > 300`
+    const res = await this.pool.query(query)
+
+    return res.rows
   }
 }

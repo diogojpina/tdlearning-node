@@ -22,6 +22,8 @@ class Augmentation {
 
     await this.connectMongo()
 
+    const answers = await sonarService.getAnswers()
+
     const labelsMap: Map<string, number> = new Map<string, number>()
     const filesByLabel: Map<number, string[]> = new Map<number, string[]>()
     const results = []
@@ -74,6 +76,13 @@ class Augmentation {
         console.log(i)
 
         // console.log(results)
+
+        for (const answer of answers) {
+          console.log(answer.long_name)
+          if (labelsMap.has(answer.long_name)) {
+            console.log('sim')
+          }
+        }
         process.exit(0)
       })
   }

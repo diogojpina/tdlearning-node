@@ -81,7 +81,7 @@ class FilesStats {
   }
 
   private async getProjectMeasures (projectUUID, i): Promise<any> {
-    const measures = await this.sonarService.getFilesOverallMeasuresByProjectUUID(projectUUID)
+    const measures = await this.sonarService.getProjectsOverallMeasuresByProjectUUID(projectUUID)
 
     const rows = []
     let stats: any = {}

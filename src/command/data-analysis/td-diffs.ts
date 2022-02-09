@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { config } from 'dotenv'
 
+import ObjectsToCsv from 'objects-to-csv'
+
 import { SonarService } from '../../services/SonarService'
 import { Repository } from '../../model/Repository'
 import { RepositoryTag } from '../../model/RepositoryTag'
@@ -21,7 +23,11 @@ class TechnicalDebtDiffs {
     const repo = await Repository.findOne({ full_name: fullName })
     const tags: any = await RepositoryTag.find({ repository: repo._id })
 
+    // const tds = await this.analyzeTags(repo.name, 'maven-3.0', 'maven-3.2.1')
+    // console.log(tds.length)
+
     let total = 0
+    const tdDiffs = []
 
     let tag1 = null
     for (const tag2 of tags) {
@@ -33,10 +39,15 @@ class TechnicalDebtDiffs {
       }
 
       const tds = await this.analyzeTags(repo.name, tag1.tag, tag2.tag)
-      // for (const [file, td] of tds) {
-      //   console.log('td', td)
-      // }
-      console.log(tds)
+      for (const { file, ruleId, tag1, tag2, measures1, measures2 } of tds) {
+        // console.log('file', file)
+        const measureDiffs = this.measuresDiff(measures1, measures2)
+        const diffs = { ...{ file, ruleId, tag1, tag2 }, ...measureDiffs }
+        tdDiffs.push(diffs)
+
+        // console.log('measure-diffs', diffs)
+      }
+      // console.log(tds)
       total += tds.length
       console.log('total', total)
 
@@ -44,6 +55,14 @@ class TechnicalDebtDiffs {
     }
 
     console.log('total', total)
+
+    console.log('create-csv-object')
+    const csv = new ObjectsToCsv(tdDiffs)
+    console.log('csv-object-created')
+
+    console.log('writing')
+    await csv.toDisk('./csv/tds-diff.csv')
+    console.log('wrote')
 
     process.exit(0)
   }
@@ -66,6 +85,7 @@ class TechnicalDebtDiffs {
     const rows = []
 
     for (const [fileId1, file1Map] of td1Map) {
+      // não tem o arquivo na versão mais nova. Adiciono todos os items?
       if (td2Map.has(fileId1) === false) continue
 
       const file2Map = td2Map.get(fileId1)
@@ -79,38 +99,49 @@ class TechnicalDebtDiffs {
           // console.log('td2-count', tds2.length)
           // console.log('td1-count', tds1.length)
           // console.log('diff', tdDiff)
+
+          // verifica se a quantidade de dívida técnica diminui de uma versão para outra
           if (tdDiff <= 0) continue
+          // console.log('diff', tdDiff)
           // console.log('td1', tds1.length)
         } else {
+          // todos os itens de um tipo foi pago de uma versão para a outra
           tdDiff = tds1.length
         }
 
-        for (let i = 0; i < tdDiff; i++) {
-          rows.push(fileId1)
+        const fileMeasures1 = measures1.get(fileId1)
+        const fileMeasures2 = measures2.get(fileId1)
+
+        const variables1 = this.sonarService.formatMeasures(fileMeasures1)
+        const variables2 = this.sonarService.formatMeasures(fileMeasures2)
+
+        for (let i = 0; i < Math.abs(tdDiff); i++) {
+          rows.push({ file: fileId1, ruleId, tag1, tag2, measures1: variables1, measures2: variables2 })
         }
       }
+      // console.log('size', file1Map.size, file2Map.size)
+      // if (file2Map.size >= file1Map.size) continue
 
-      if (file2Map.size >= file1Map.size) continue
+      // const fileMeasures1 = measures1.get(fileId1)
+      // const fileMeasures2 = measures2.get(fileId1)
 
-      const fileMeasures1 = measures1.get(fileId1)
-      const fileMeasures2 = measures2.get(fileId1)
+      // // console.log(fileId1)
+      // // console.log(file1Map.size)
+      // // console.log(file2Map.size)
 
-      // console.log(fileId1)
-      // console.log(file1Map.size)
-      // console.log(file2Map.size)
+      // const variables1 = this.sonarService.formatMeasures(fileMeasures1)
+      // variables1.push({
+      //   key: 'paid',
+      //   value: file1Map.size - file2Map.size
+      // })
 
-      const variables1 = this.sonarService.formatMeasures(fileMeasures1)
-      variables1.push({
-        key: 'paid',
-        value: file1Map.size - file2Map.size
-      })
+      // console.log('VARS', variables1.length)
 
-      console.log('VARS', variables1.length)
+      // // console.log('variables1', variables1)
 
-      // console.log('variables1', variables1)
-
-      const variables2 = this.sonarService.formatMeasures(fileMeasures2)
-      // console.log('variables2', variables2)
+      // const variables2 = this.sonarService.formatMeasures(fileMeasures2)
+      // // console.log('variables2', variables2)
+      // console.log('VARS2', variables2.length)
     }
 
     return rows
@@ -136,6 +167,20 @@ class TechnicalDebtDiffs {
     }
 
     return tdMap
+  }
+
+  private measuresDiff (measures1, measures2) {
+    const diffs = {}
+    for (const measure1 of measures1) {
+      for (const measure2 of measures2) {
+        if (measure1.key !== measure2.key) continue
+
+        // diffs[measure1.key] = measure1.value - measure2.value
+        diffs[`measure1-${measure1.key}`] = measure1.value
+        diffs[`measure2-${measure2.key}`] = measure2.value
+      }
+    }
+    return diffs
   }
 
   public async connectMongo () {

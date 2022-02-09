@@ -5,7 +5,7 @@ import { Repository } from '../model/Repository'
 import { User } from '../model/User'
 
 export class GithubService {
-  public static async getOctokit (): Octokit {
+  public static async getOctokit (): Promise<Octokit> {
     const credentials = JSON.parse(process.env.GITHUB_CREDENTIALS)
     const index = Math.floor(Math.random() * credentials.length)
 
