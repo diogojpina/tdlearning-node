@@ -34,5 +34,8 @@
 ### build
 /build
 
+### csv
+/csv
+
 yarn.lock
 
